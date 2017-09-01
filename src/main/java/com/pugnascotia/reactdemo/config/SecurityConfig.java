@@ -2,13 +2,20 @@ package com.pugnascotia.reactdemo.config;
 
 import javax.inject.Inject;
 
+import com.pugnascotia.reactdemo.component.SecUserDetailsService;
 import com.pugnascotia.reactdemo.config.ajax.AjaxAuthenticationSuccessHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyAuthoritiesMapper;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
@@ -28,16 +35,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Inject
 	private AjaxLogoutSuccessHandler logoutSuccessHandler;
 
-	/**
-	 * Demo-only users. Replace this with a real authentication config.
-	 */
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication()
-			.withUser("user").password("password").roles("USER").and()
-			.withUser("admin").password("admin").roles("USER", "ADMIN");
+	@Autowired
+	SecUserDetailsService userDetailsService ;
+
+	@Autowired
+	public void configAuthBuilder(AuthenticationManagerBuilder builder) throws Exception {
+		builder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
 
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 	/**
 	 * Specify the paths that Spring Security will completely ignore. This is distinct
 	 * from paths that are available to all users. Static, public resources are ideal

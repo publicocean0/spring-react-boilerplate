@@ -1,4 +1,4 @@
-package com.pugnascotia.reactdemo.errors;
+package com.pugnascotia.reactdemo.controller;
 
 import java.util.Map;
 import javax.inject.Inject;

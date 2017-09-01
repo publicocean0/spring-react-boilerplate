@@ -16,7 +16,8 @@ const AppMeta = () => (
       { name: 'description', content: 'Spring React Boilerplate' },
       { property: 'og:type', content: 'article' },
       { 'http-equiv': 'X-UA-Compatible', content: 'IE=edge' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'theme-color', content: '#317EFB' }
     ]}
     link={[
         { rel: 'canonical', href: 'http://example.com/example' },
